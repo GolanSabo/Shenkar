@@ -22,13 +22,13 @@
 #include <string>
 
 #define HEIGHT_OF_CELL 3
-typedef struct Node{
+typedef struct Node {
 	int index;
 	bool checked;
 	std::string text;
 	Node* next;
 }node;
-class CheckList:public Widget
+class CheckList :public Widget
 {
 	node* _head;
 	node* _current;
@@ -36,7 +36,7 @@ class CheckList:public Widget
 	char _frame;
 
 	//Private methods
-	int GetLongestString();
+	int GetLongestString() const;
 	void DrawItem(COORD CursorPosition, HANDLE console, node* item, bool focusFlag, bool checkedFlag);
 
 public:
@@ -47,10 +47,10 @@ public:
 
 	//Functionalities
 	void Add(std::string text);
-	void Draw(COORD CursorPosition, HANDLE console);
-	int MouseEvent(MOUSE_EVENT_RECORD mer);
-	int KeyboardEvent(KEY_EVENT_RECORD ker, COORD& currentLocation);
-	bool CheckPosition(COORD clickedPosition);
+	void Draw(COORD CursorPosition, const HANDLE& console);
+	int MouseEvent(const MOUSE_EVENT_RECORD& mer);
+	int KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation);
+	bool CheckPosition(COORD clickedPosition) const;
 
 	//Destructors
 	~CheckList();

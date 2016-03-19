@@ -25,7 +25,7 @@ CheckList::CheckList(int x, int y, char frame) : Widget(x, y, 40, 40, false), _n
 CheckList::CheckList(int x, int y) : Widget(x, y, 40, 40, false), _numberOfItems(0), _head(NULL), _current(NULL), _frame('@')
 {}
 
-void CheckList::Draw(COORD CursorPosition, HANDLE console)
+void CheckList::Draw(COORD CursorPosition, const HANDLE& console)
 {
 	if (!_numberOfItems)
 		return;
@@ -34,7 +34,7 @@ void CheckList::Draw(COORD CursorPosition, HANDLE console)
 
 	while (iterator)
 	{
-		if(iterator->index == _current->index)
+		if (iterator->index == _current->index)
 			DrawItem(CursorPosition, console, iterator, true, iterator->checked);
 		else
 			DrawItem(CursorPosition, console, iterator, false, iterator->checked);
@@ -83,7 +83,7 @@ void CheckList::DrawItem(COORD CursorPosition, HANDLE console, node* item, bool 
 			else
 			{
 				SetConsoleTextAttribute(console, wAttr1);
-				if(j == 1 && checkedFlag)
+				if (j == 1 && checkedFlag)
 					std::cout << 'X';
 				else
 					std::cout << " ";
@@ -94,7 +94,7 @@ void CheckList::DrawItem(COORD CursorPosition, HANDLE console, node* item, bool 
 }
 
 
-int CheckList::GetLongestString()
+int CheckList::GetLongestString() const
 {
 	node* iterator = _head;
 	int maxSize = 0;
@@ -125,31 +125,31 @@ void CheckList::Add(std::string text)
 		{
 			_current = _current->next;
 		}
-			_current->next = new node;
-			_current->next->index = _current->index + 1;
-			_current = _current->next;
-			_current->next = NULL;
-			_current->text = text;
-			_current->checked = false;
-			++_numberOfItems;
-		
+		_current->next = new node;
+		_current->next->index = _current->index + 1;
+		_current = _current->next;
+		_current->next = NULL;
+		_current->text = text;
+		_current->checked = false;
+		++_numberOfItems;
+
 	}
 	_current = _head;
 }
 
-bool CheckList::CheckPosition(COORD clickedPosition)
+bool CheckList::CheckPosition(COORD clickedPosition) const
 {
 	COORD tmp = GetCoord();
 	int y = tmp.Y + (_numberOfItems * HEIGHT_OF_CELL);
 	int x = tmp.X + GetLongestString() + 6;
-	if ( y < clickedPosition.Y || tmp.Y > clickedPosition.Y)
+	if (y < clickedPosition.Y || tmp.Y > clickedPosition.Y)
 		return false;
 	if (x < clickedPosition.X || tmp.X > clickedPosition.X)
 		return false;
 	return true;
 }
 
-int CheckList::MouseEvent(MOUSE_EVENT_RECORD mer)
+int CheckList::MouseEvent(const MOUSE_EVENT_RECORD& mer)
 {
 	COORD x = mer.dwMousePosition;
 	if (CheckPosition(x))
@@ -171,7 +171,7 @@ int CheckList::MouseEvent(MOUSE_EVENT_RECORD mer)
 	}
 }
 
-int CheckList::KeyboardEvent(KEY_EVENT_RECORD ker, COORD& currentLocation)
+int CheckList::KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation)
 {
 
 	if (ker.wVirtualKeyCode == VK_UP || ker.wVirtualKeyCode == 104)
@@ -210,12 +210,12 @@ int CheckList::KeyboardEvent(KEY_EVENT_RECORD ker, COORD& currentLocation)
 CheckList::~CheckList()
 {
 	node* iterator = _head;
-	while(iterator->next)
+	while (iterator->next)
 	{
 		_head = iterator->next;
 		delete iterator;
 		iterator = _head;
-			
+
 	}
 }
 

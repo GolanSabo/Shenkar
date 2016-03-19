@@ -18,7 +18,7 @@
 
 
 #include "ConsoleEventHandler.h"
-
+//#include "../ComboBox/ComboBox.h"
 
 
 ConsoleEventHandler::ConsoleEventHandler()
@@ -48,7 +48,7 @@ void ConsoleEventHandler::Sign(Widget* wid)
 		widgetHash = new WidgetHash[5];
 		totalSize = 5;
 	}
-	else if(numberOfWidgets == totalSize)
+	else if (numberOfWidgets == totalSize)
 	{
 		WidgetHash* tmp = new WidgetHash[totalSize * 2];
 		for (int i = 0; i < totalSize; ++i)
@@ -60,7 +60,7 @@ void ConsoleEventHandler::Sign(Widget* wid)
 	}
 	widgetHash[numberOfWidgets].widget = wid;
 	widgetHash[numberOfWidgets].index = numberOfWidgets + 1;
-	
+
 	++numberOfWidgets;
 	currentWidgetInFocus = wid;
 	if (wid->GetEditFlag())
@@ -78,7 +78,7 @@ void ConsoleEventHandler::Sign(Widget* wid)
 
 	wid->Draw(cursorPosition, console);
 	SetConsoleCursorPosition(console, GetWidgetDefaultCursorPosition(wid));
-	Listen();
+	//Listen();
 
 }
 
@@ -108,8 +108,9 @@ void ConsoleEventHandler::Listen()
 			switch (irInBuf[i].EventType)
 			{
 			case KEY_EVENT: // keyboard input 
-				if (irInBuf[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE)
+				if (irInBuf[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE) {
 					return;
+				}
 				KeyEventProc(irInBuf[i].Event.KeyEvent);
 				break;
 
@@ -131,7 +132,7 @@ VOID ConsoleEventHandler::KeyEventProc(KEY_EVENT_RECORD ker)
 
 	COORD tmp = GetCurrentLocation();
 
-	switch(currentWidgetInFocus->KeyboardEvent(ker, tmp))
+	switch (currentWidgetInFocus->KeyboardEvent(ker, tmp))
 	{
 	case NONE:
 		break;
@@ -146,9 +147,13 @@ VOID ConsoleEventHandler::KeyEventProc(KEY_EVENT_RECORD ker)
 	case DRAW:
 		//ResetColor();
 		//ChangeCurrentWidgetColor(currentWidgetInFocus->GetColor());
-		currentWidgetInFocus->Draw(currentWidgetInFocus->GetCoord(),console);
+		currentWidgetInFocus->Draw(currentWidgetInFocus->GetCoord(), console);
+		break;
+	case DRAW_COLOR:
+		currentWidgetInFocus->Draw_Color(currentWidgetInFocus->GetCoord(), console);
 		break;
 	}
+
 
 }
 
@@ -157,7 +162,33 @@ VOID ConsoleEventHandler::MouseEventProc(MOUSE_EVENT_RECORD mer)
 #ifndef MOUSE_HWHEELED
 #define MOUSE_HWHEELED 0x0008
 #endif
+	COORD tmp = mer.dwMousePosition;
+	int x = CheckWidget(tmp);
+	if (x == -1) {
+		if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
 
+			for (int i = 0; i < numberOfWidgets; ++i) {
+				Widget* wid = widgetHash[i].widget;
+				if (!wid->GetOpenState())
+					wid->Draw(wid->GetCoord(), console);
+			}
+			/*ComboBox* cb = dynamic_cast<ComboBox*> (wid);
+			if (cb != NULL)
+			if (!cb->GetOpenState())
+			cb->Draw(cb->GetCoord(), console);
+			*/
+
+
+		}
+		return;
+	}
+
+	Widget* wid = widgetHash[x].widget;
+	switch (wid->MouseEvent(mer)) {
+	case DRAW_COLOR:
+		currentWidgetInFocus->Draw_Color(currentWidgetInFocus->GetCoord(), console);
+		break;
+	}
 	if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 	{
 		COORD tmp = mer.dwMousePosition;

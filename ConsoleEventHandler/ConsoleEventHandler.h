@@ -18,13 +18,15 @@
 
 #pragma once
 #include "../Widget/Widget.h"
+#include "../ComboBox/ComboBox.h"
 
 typedef enum
 {
 	NONE = 0,
 	MOVE_CURSOR = 1,
 	PRINT_KEY = 2,
-	DRAW = 3
+	DRAW = 3,
+	DRAW_COLOR = 4
 }Action;
 
 typedef struct {

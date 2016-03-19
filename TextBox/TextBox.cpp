@@ -23,9 +23,9 @@ TextBox::TextBox() : _frame('@'), Widget() { ConsoleSingleton::GetInstance()->Si
 
 TextBox::TextBox(int x, int y, int width, int height, char frame) : _frame(frame), Widget(x, y, width, height, true) { ConsoleSingleton::GetInstance()->Sign(this); }
 
-TextBox::TextBox(int x, int y, int width, int height) : _frame('@'), Widget(x, y, width, height, true) { ConsoleSingleton::GetInstance()->Sign(this);}
+TextBox::TextBox(int x, int y, int width, int height) : _frame('@'), Widget(x, y, width, height, true) { ConsoleSingleton::GetInstance()->Sign(this); }
 
-void TextBox::Draw(COORD CursorPosition, HANDLE console)
+void TextBox::Draw(COORD CursorPosition, const HANDLE& console)
 {
 	CursorPosition = GetCoord();
 	for (int i = 0; i < GetHeight(); ++i)
@@ -50,14 +50,14 @@ void TextBox::Draw(COORD CursorPosition, HANDLE console)
 	}
 }
 
-int TextBox::MouseEvent(MOUSE_EVENT_RECORD mer)
+int TextBox::MouseEvent(const MOUSE_EVENT_RECORD& mer)
 {
 	if (CheckPosition(mer.dwMousePosition))
 		return MOVE_CURSOR;
 	return NONE;
 }
 
-COORD TextBox::GetDefaultPosition()
+COORD TextBox::GetDefaultPosition() const
 {
 	COORD defaultPosition;
 	defaultPosition.X = GetX() + 1;
@@ -65,11 +65,11 @@ COORD TextBox::GetDefaultPosition()
 	return defaultPosition;
 }
 
-bool TextBox::CheckPosition(COORD clickedPosition)
+bool TextBox::CheckPosition(COORD clickedPosition) const
 {
 	COORD defaultPosition = GetDefaultPosition();
 	int x = defaultPosition.X + GetWidth() - 1;
-	int y = defaultPosition.Y + GetHeight()- 2;
+	int y = defaultPosition.Y + GetHeight() - 2;
 	if (clickedPosition.X >= x || clickedPosition.X < defaultPosition.X)
 		return false;
 	if (clickedPosition.Y >= y || clickedPosition.Y < defaultPosition.Y)
@@ -78,7 +78,7 @@ bool TextBox::CheckPosition(COORD clickedPosition)
 	return true;
 }
 
-int TextBox::KeyboardEvent(KEY_EVENT_RECORD ker, COORD& currentLocation)
+int TextBox::KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation)
 {
 	//if (!currentWidgetInFocus->GetEditFlag())
 	//	return;
