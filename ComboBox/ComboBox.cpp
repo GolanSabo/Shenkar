@@ -96,7 +96,7 @@ int ComboBox::GetLongestString() const
 void ComboBox::DrawItem(COORD CursorPosition, const HANDLE& console, strVecItr itr, const bool& focusFlag) const
 {
 
-	int width = GetLongestString() + 6;
+	int width = GetLongestString() + 4;
 	int height = HEIGHT_OF_CELL;
 	int k = 0;
 	CONSOLE_SCREEN_BUFFER_INFO cbi;
@@ -120,7 +120,7 @@ void ComboBox::DrawItem(COORD CursorPosition, const HANDLE& console, strVecItr i
 				std::cout << "*";
 			}
 
-			else if (j > 3 && k < itr->text.size())
+			else if (j > 1 && k < itr->text.size())
 			{
 				SetConsoleTextAttribute(console, wAttr1);
 				std::cout << itr->text.at(k);
