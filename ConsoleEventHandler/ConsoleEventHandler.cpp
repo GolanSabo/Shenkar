@@ -18,13 +18,15 @@
 
 
 #include "ConsoleEventHandler.h"
-//#include "../ComboBox/ComboBox.h"
 
 
 ConsoleEventHandler::ConsoleEventHandler()
 {
+
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
 	hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleScreenBufferInfo(console, &cbi);
+	wAttr = cbi.wAttributes;
 	numberOfWidgets = 0;
 	totalSize = 0;
 	currentWidgetInFocus = NULL;
@@ -34,6 +36,7 @@ ConsoleEventHandler::ConsoleEventHandler(DWORD attributes)
 {
 	console = GetStdHandle(STD_OUTPUT_HANDLE);
 	hStdin = GetStdHandle(STD_INPUT_HANDLE);
+	GetConsoleScreenBufferInfo(console, &cbi);
 	wAttr = attributes;
 	numberOfWidgets = 0;
 	totalSize = 0;
@@ -109,6 +112,10 @@ void ConsoleEventHandler::Listen()
 			{
 			case KEY_EVENT: // keyboard input 
 				if (irInBuf[i].Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE) {
+					COORD tmp;
+					tmp.X = 0;
+					tmp.Y = 0;
+					SetConsoleCursorPosition(console, tmp);
 					return;
 				}
 				KeyEventProc(irInBuf[i].Event.KeyEvent);
@@ -148,6 +155,8 @@ VOID ConsoleEventHandler::KeyEventProc(KEY_EVENT_RECORD ker)
 		//ResetColor();
 		//ChangeCurrentWidgetColor(currentWidgetInFocus->GetColor());
 		currentWidgetInFocus->Draw(currentWidgetInFocus->GetCoord(), console);
+		SetConsoleCursorPosition(console, tmp);
+		cursorPosition = tmp;
 		break;
 	case DRAW_COLOR:
 		currentWidgetInFocus->Draw_Color(currentWidgetInFocus->GetCoord(), console);
@@ -184,11 +193,11 @@ VOID ConsoleEventHandler::MouseEventProc(MOUSE_EVENT_RECORD mer)
 	}
 
 	Widget* wid = widgetHash[x].widget;
-	switch (wid->MouseEvent(mer)) {
-	case DRAW_COLOR:
-		currentWidgetInFocus->Draw_Color(currentWidgetInFocus->GetCoord(), console);
-		break;
-	}
+	//switch (wid->MouseEvent(mer)) {
+	//case DRAW_COLOR:
+	//	currentWidgetInFocus->Draw_Color(currentWidgetInFocus->GetCoord(), console);
+	//	break;
+	//}
 	if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 	{
 		COORD tmp = mer.dwMousePosition;
@@ -203,6 +212,7 @@ VOID ConsoleEventHandler::MouseEventProc(MOUSE_EVENT_RECORD mer)
 			currentWidgetInFocus = widgetHash[x].widget;
 			break;
 		case MOVE_CURSOR:
+			tmp = mer.dwMousePosition;
 			SetConsoleCursorPosition(console, tmp);
 			cursorPosition = tmp;
 			if (currentWidgetInFocus != widgetHash[x].widget)

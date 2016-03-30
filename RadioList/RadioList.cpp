@@ -5,8 +5,8 @@
 *******													   *******
 *******													   *******
 *******			Methods in software engineering			   *******
-*******			     Writen By - Golan Sabo				   *******
-*******				   Date - 13/3/2016					   *******
+*******			     Writen By - Ido Algom   s			   *******
+*******				   Date - 29/3/2016					   *******
 *******					   *******						   *******
 *******													   *******
 ******************************************************************
@@ -16,16 +16,16 @@
 
 
 
-#include "CheckList.h"
+#include "RadioList.h"
 #include "../Widget/Widget.h"
 
 
-CheckList::CheckList(int x, int y, char frame) : Widget(x, y, 40, 40, false), _numberOfItems(0), _head(NULL), _current(NULL), _frame(frame)
+RadioList::RadioList(int x, int y, char frame) : Widget(x, y, 40, 40, false), _numberOfItems(0), _head(NULL), _current(NULL), _frame(frame)
 {}
-CheckList::CheckList(int x, int y) : Widget(x, y, 40, 40, false), _numberOfItems(0), _head(NULL), _current(NULL), _frame('@')
+RadioList::RadioList(int x, int y) : Widget(x, y, 40, 40, false), _numberOfItems(0), _head(NULL), _current(NULL), _frame('@')
 {}
 
-void CheckList::Draw(COORD CursorPosition, const HANDLE& console)
+void RadioList::Draw(COORD CursorPosition, const HANDLE& console)
 {
 	if (!_numberOfItems)
 		return;
@@ -44,7 +44,7 @@ void CheckList::Draw(COORD CursorPosition, const HANDLE& console)
 	}
 }
 
-void CheckList::DrawItem(COORD CursorPosition, HANDLE console, node* item, bool focusFlag, bool checkedFlag)
+void RadioList::DrawItem(COORD CursorPosition, HANDLE console, node* item, bool focusFlag, bool checkedFlag)
 {
 	int width = GetLongestString() + 6;
 	int height = HEIGHT_OF_CELL;
@@ -94,7 +94,7 @@ void CheckList::DrawItem(COORD CursorPosition, HANDLE console, node* item, bool 
 }
 
 
-int CheckList::GetLongestString() const
+int RadioList::GetLongestString() const
 {
 	node* iterator = _head;
 	int maxSize = 0;
@@ -107,7 +107,7 @@ int CheckList::GetLongestString() const
 	return maxSize;
 }
 
-void CheckList::Add(std::string text)
+void RadioList::Add(std::string text)
 {
 	if (!_head)
 	{
@@ -137,7 +137,7 @@ void CheckList::Add(std::string text)
 	_current = _head;
 }
 
-bool CheckList::CheckPosition(COORD clickedPosition) const
+bool RadioList::CheckPosition(COORD clickedPosition) const
 {
 	COORD tmp = GetCoord();
 	int y = tmp.Y + (_numberOfItems * HEIGHT_OF_CELL);
@@ -149,7 +149,7 @@ bool CheckList::CheckPosition(COORD clickedPosition) const
 	return true;
 }
 
-int CheckList::MouseEvent(MOUSE_EVENT_RECORD& mer)
+int RadioList::MouseEvent(MOUSE_EVENT_RECORD& mer)
 {
 	COORD x = mer.dwMousePosition;
 	if (CheckPosition(x))
@@ -163,16 +163,19 @@ int CheckList::MouseEvent(MOUSE_EVENT_RECORD& mer)
 			if (iterator->index == tmp)
 			{
 				_current = iterator;
-				_current->checked = !_current->checked;
-				return DRAW;
+				_current->checked = true;
 			}
+			else
+				iterator->checked = false;
 			iterator = iterator->next;
+
 		}
+		return DRAW;
 
 	}
 }
 
-int CheckList::KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation)
+int RadioList::KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation)
 {
 
 	if (ker.wVirtualKeyCode == VK_UP || ker.wVirtualKeyCode == 104)
@@ -203,12 +206,22 @@ int CheckList::KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation
 	}
 	else if (ker.wVirtualKeyCode == VK_RETURN)
 	{
-		_current->checked = !_current->checked;
+		if (!_current->checked) {
+			node* iterator = _head;
+			while (iterator)
+			{
+				iterator->checked = false;
+				iterator = iterator->next;
+			}
+			_current->checked = true;
+		}
 		return DRAW;
 	}
 }
 
-CheckList::~CheckList()
+
+
+RadioList::~RadioList()
 {
 	node* iterator = _head;
 	while (iterator->next)
@@ -219,5 +232,4 @@ CheckList::~CheckList()
 
 	}
 }
-
 

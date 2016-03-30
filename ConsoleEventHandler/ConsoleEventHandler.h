@@ -45,6 +45,7 @@ class ConsoleEventHandler
 	int numberOfWidgets;
 	int totalSize;
 	CONSOLE_CURSOR_INFO cci;
+	CONSOLE_SCREEN_BUFFER_INFO cbi;
 	//Private Methods
 	COORD GetWidgetDefaultCursorPosition(Widget* wid);
 public:

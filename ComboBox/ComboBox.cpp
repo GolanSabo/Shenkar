@@ -239,7 +239,7 @@ void ComboBox::Draw_Color(COORD CursorPosition,const HANDLE& console) {
 * RETURN       : On Hover - DRAW_COLOR, On click - DRAW.
 * NOTES        : Polymorphic function - inherited from Widget.
 * -------------------------------------------------------------------- */
-int ComboBox::MouseEvent(const MOUSE_EVENT_RECORD& mer)
+int ComboBox::MouseEvent(MOUSE_EVENT_RECORD& mer)
 {
 	COORD x = mer.dwMousePosition;
 	if (CheckPosition(x))

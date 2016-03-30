@@ -54,7 +54,7 @@ void Label::Draw(COORD CursorPosition, const HANDLE & console)
 	}
 }
 
-int Label::MouseEvent(const MOUSE_EVENT_RECORD & mer)
+int Label::MouseEvent(MOUSE_EVENT_RECORD & mer)
 {
 	return 0;
 }

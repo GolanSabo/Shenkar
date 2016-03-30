@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	//ConsoleSingleton::GetInstance()->Sign(t);
 	//ConsoleSingleton::GetInstance()->ChangeCurrentWidgetColor(FOREGROUND_RED | FOREGROUND_INTENSITY);
 
-	//ConsoleSingleton::GetInstance()->Listen();
+	ConsoleSingleton::GetInstance()->Listen();
 	getchar();
 
 	return 0;

@@ -150,15 +150,16 @@
     <ProjectReference Include="..\ConsoleEventHandler\ConsoleEventHandler.vcxproj">
       <Project>{4e405cf3-d7f0-4893-8ff1-52562f1a023e}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\ConsoleSingleton\ConsoleSingleton.vcxproj">
-      <Project>{faa38ec4-8684-425c-8ccf-f407e875cf84}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Widget\Widget.vcxproj">
       <Project>{d559ca8b-f841-455e-8ccd-9a2846015613}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="..\RadioList\Main.cpp" />
+    <ClCompile Include="..\RadioList\RadioList.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\RadioList\RadioList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

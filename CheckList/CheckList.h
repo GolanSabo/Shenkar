@@ -48,7 +48,7 @@ public:
 	//Functionalities
 	void Add(std::string text);
 	void Draw(COORD CursorPosition, const HANDLE& console);
-	int MouseEvent(const MOUSE_EVENT_RECORD& mer);
+	int MouseEvent(MOUSE_EVENT_RECORD& mer);
 	int KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation);
 	bool CheckPosition(COORD clickedPosition) const;
 

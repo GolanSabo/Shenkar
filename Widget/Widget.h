@@ -54,7 +54,7 @@ public:
 	virtual void clearWidget(COORD CursorPosition, const HANDLE& console, const int& width, const int& height) const;
 	virtual void Draw(COORD CursorPosition, const HANDLE& console) = 0;
 	virtual void Draw_Color(COORD CursorPosition, const HANDLE& console);
-	virtual int MouseEvent(const MOUSE_EVENT_RECORD& mer) = 0;
+	virtual int MouseEvent(MOUSE_EVENT_RECORD& mer) = 0;
 	virtual int KeyboardEvent(const KEY_EVENT_RECORD& ker, COORD& currentLocation) = 0;
 	virtual bool CheckPosition(COORD clickedPosition) const = 0;
 	void EnableEdit(bool flag);

@@ -156,7 +156,7 @@ public:
 	* RETURN       : On Hover - DRAW_COLOR, On click - DRAW.
 	* NOTES        : Polymorphic function - inherited from Widget.
 	* -------------------------------------------------------------------- */
-	int MouseEvent(const MOUSE_EVENT_RECORD& mer);
+	int MouseEvent(MOUSE_EVENT_RECORD& mer);
 
 	/* --------------------------------------------------------------------
 	* FUNCTION NAME: KeyboardEvent
